@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Input and Output</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            display: flex;
+            width: 50%;
+        }
+
+        #input-side {
+            flex: 1;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        #output-side {
+            flex: 1;
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        #output {
+            white-space: pre-line;
+        }
+
+        #confirm-btn {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div method="POST" id="container">
+        <div id="input-side">
+            <h2>Input Text</h2>
+            <textarea id="input-text"></textarea>
+            <button onclick="processText()" id="confirm-btn">Confirm</button>
+        </div>
+        <div id="output-side">
+            <h2>Output Text</h2>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script>
+         function processText() {
+            var inputText = document.getElementById('input-text').value;
+            fetch('/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: inputText }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerText = data.braille_result;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
